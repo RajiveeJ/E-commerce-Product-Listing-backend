@@ -5,7 +5,7 @@
  */
 
 var app = require('../app');
-var debug = require('debug')('food-app-be:server');
+var debug = require('debug')('e-commerce-be:server');
 var http = require('http');
 
 /**
