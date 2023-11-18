@@ -34,7 +34,7 @@ const orderSchema = new mongoose.Schema({
 })
 
 let usersModel = mongoose.model('users',userSchema);
-let productModel = mongoose.model('product',productSchema);
+let productModel = mongoose.model('products',productSchema);
 let orderModel = mongoose.model('orders',orderSchema)
 
 module.exports={mongoose,usersModel,productModel,orderModel}
