@@ -1,9 +1,10 @@
 var express = require('express');
 var router = express.Router();
-const {mongodb,dbName,dbUrl} = require('../config/dbConfig')
+const {mongodb,dbName,dbUrl,mongoClient} = require('../config/dbConfig')
 const {mongoose,usersModel,productModel,orderModel} = require('../config/dbSchema')
 const {hashPassword,hashCompare,createToken,decodeToken,validateToken,adminGaurd} = require('../config/auth')
 mongoose.connect(dbUrl)
+// const MongoClient = require('mongodb').MongoClient;
 
 router.get('/all-product',validateToken,async(req, res)=>{
   try {
@@ -42,10 +43,12 @@ router.post('/add-product',validateToken,adminGaurd,async(req,res)=>{
   }
 })
 
-router.delete('/delete-product/:id',validateToken,adminGaurd,async(req,res)=>{
+router.post('/delete-product',validateToken,adminGaurd,async(req,res)=>{
   try {
-    let product = await productModel.deleteOne({_id:mongodb.ObjectId(req.params.id)})
-    res.send({
+    
+    let product = await productModel.deleteOne({_id:new mongoose.Types.ObjectId(req.body.productId)})
+   
+  res.send({
       statusCode:200,
       message:"product Deleted Successfully"
     })
@@ -101,7 +104,7 @@ router.get('/orders',validateToken,adminGaurd,async(req,res)=>{
 //Indivudual Order
 router.get('/orders/:id',validateToken,adminGaurd,async(req,res)=>{
   try {
-    let order = await orderModel.findOne({_id:mongodb.ObjectId(req.params.id)})
+    let order = await orderModel.findOne({_id:new mongoose.Types.ObjectId(req.params.id)})
     res.send({
       statusCode:200,
       order
@@ -119,7 +122,7 @@ router.get('/orders/:id',validateToken,adminGaurd,async(req,res)=>{
 
 router.put('/order-status/:id',validateToken,adminGaurd,async(req,res)=>{
   try {
-    let order = await orderModel.findOne({_id:mongodb.ObjectId(req.params.id)})
+    let order = await orderModel.findOne({_id:new mongoose.Types.ObjectId(req.params.id)})
     if(order)
     {
       let newStatus = ""
